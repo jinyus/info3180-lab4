@@ -9,6 +9,7 @@ from app import app
 from flask import render_template, request, redirect, url_for, flash, session, abort
 from werkzeug.utils import secure_filename
 from forms import UploadForm
+from photos import getPhotos
 
 
 ###
@@ -77,6 +78,12 @@ def logout():
     session.pop('logged_in', None)
     flash('You were logged out', 'success')
     return redirect(url_for('home'))
+    
+@app.route('/files/')
+def files():
+    if not session.get('logged_in'):
+        abort(401)
+    return render_template("files.html", photos=getPhotos())
 
 
 ###
